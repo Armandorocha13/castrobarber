@@ -76,3 +76,33 @@ header {
 }
 
 
+/* Responsividade para telas móveis */
+@media (max-width: 768px) {
+    #formAgendamento {
+        width: 90%;
+        height: auto;
+    }
+
+    input, select {
+        width: 100%;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    button {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    label {
+        font-size: 16px;
+    }
+
+    .confirmacao {
+        padding: 20px;
+        font-size: 1.5em;
+    }
+}
+
