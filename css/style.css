@@ -1,14 +1,14 @@
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
-body{
+body {
     background-color: #000300;
 }
 
-header{
+header {
     color: #fff;
     display: flex;
     text-align: center;
@@ -18,31 +18,29 @@ header{
     font-style: italic;
 }
 
-i{
+i {
     font-size: 20px;
-    
 }
 
-span{
+span {
     color: #ad1313;
 }
 
-
 /*FORMULÁRIO DE AGENDAMENTO*/
-
-#formAgendamento{
+#formAgendamento {
     display: flex;
     flex-direction: column;
     width: 50%;
     margin: 0 auto;
     background: #212121;
     box-shadow: 15px 15px 30px rgb(25, 25, 25),
-                -15px -15px 30px rgb(60, 60, 60);    
-                height: 760px;
+                -15px -15px 30px rgb(60, 60, 60);
+    height: 760px;
     border-radius: 25px;
     padding: 15px;
 }
-h2{
+
+h2 {
     color: #fff;
     border-bottom: 2px solid #b95a00;
     text-align: center;
@@ -50,38 +48,34 @@ h2{
     font-weight: bold;
     font-weight: 200;
 }
-input{
+
+input {
     border: none;
     outline: none;
-   margin: 0 auto;
+    margin: 0 auto;
     border-radius: 15px;
     width: 50%;
     padding: 0.5em;
     background-color: #ccc;
-    -webkit-box-shadow: inset 2px 5px 10px rgba(0,0,0,0.3);
-            box-shadow: inset 2px 5px 10px rgba(0,0,0,0.3);
-    -webkit-transition: 300ms ease-in-out;
+    box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.3);
     transition: 400ms ease-in-out;
 }
 
 input:focus {
     background-color: white;
-    -webkit-transform: scale(1.05);
-        -ms-transform: scale(1.05);
-            transform: scale(1.05);
-    -webkit-box-shadow:  3px 3px 30px #969696,
-               -3px -3px 30px #1a1818;
-          
-  } 
+    transform: scale(1.05);
+    box-shadow: 3px 3px 30px #969696,
+                -3px -3px 30px #1a1818;
+}
 
-label{
-    color:#ccc;
+label {
+    color: #ccc;
     font-size: 20px;
     font-weight: bold;
     text-align: center;
 }
 
-select{
+select {
     width: 50%;
     margin: 15px auto;
     padding: 0.5rem;
@@ -95,46 +89,29 @@ select{
     font-size: 12px;
 }
 
-input[type="date"]{
+input[type="date"] {
     margin: 15px auto;
 }
 
-/* From Uiverse.io by cssbuttons-io */ 
+/* Botão */
 button {
     appearance: button;
     background-color: #e47418;
     border: solid transparent;
     border-radius: 16px;
     border-width: 0 0 4px;
-    box-sizing: border-box;
     color: #FFFFFF;
     cursor: pointer;
-    display: inline-block;
     font-size: 15px;
     font-weight: 700;
-    letter-spacing: .8px;
-    line-height: 20px;
-    margin: 0;
-    outline: none;
-    overflow: visible;
     padding: 13px 19px;
-    text-align: center;
     text-transform: uppercase;
-    touch-action: manipulation;
-    transform: translateZ(0);
-    transition: filter .2s;
-    user-select: none;
-    -webkit-user-select: none;
-    vertical-align: middle;
-    white-space: nowrap;
-   }
-   
-   button:after {
-    background-clip: padding-box;
+    transition: filter 0.2s;
+}
+
+button:after {
     background-color: #9c4003;
-    border: solid transparent;
     border-radius: 16px;
-    border-width: 0 0 4px;
     bottom: -4px;
     content: "";
     left: 0;
@@ -142,29 +119,11 @@ button {
     right: 0;
     top: 0;
     z-index: -1;
-   }
-   
-   button:main, button:focus {
-    user-select: auto;
-   }
-   
-   button:hover:not(:disabled) {
-    filter: brightness(1.1);
-   }
-   
-   button:disabled {
-    cursor: auto;
-   }
-   
-   button:active:after {
-    border-width: 0 0 0px;
-   }
-   
-   button:active {
-    padding-bottom: 10px;
-   }
+}
 
- 
+button:hover:not(:disabled) {
+    filter: brightness(1.1);
+}
 
 /* Estilos para a confirmação */
 .oculto {
@@ -178,7 +137,6 @@ button {
     transform: translate(-50%, -50%);
     background-color: rgba(0, 128, 0, 0.9);
     color: white;
-    text-decoration: none;
     padding: 50px;
     border-radius: 120px;
     text-align: center;
@@ -188,23 +146,44 @@ button {
     transition: opacity 0.5s ease-in-out;
 }
 
-.confirmacao img{
+.confirmacao img {
     width: 100px;
     display: block;
     justify-content: center;
     margin: 0 auto;
 }
 
-.oculto {
-    display: none;
-}
-
 .ativo {
-    display: block;
-}
-
-.confirmacao.ativo {
     display: block;
     opacity: 1;
 }
 
+/* Responsividade para telas móveis */
+@media (max-width: 768px) {
+    #formAgendamento {
+        width: 90%;
+        height: auto;
+    }
+
+    input, select {
+        width: 100%;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    button {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    label {
+        font-size: 16px;
+    }
+
+    .confirmacao {
+        padding: 20px;
+        font-size: 1.5em;
+    }
+}
