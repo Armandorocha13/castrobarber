@@ -1,66 +1,83 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const listaAgendamentos = document.getElementById("listaAgendamentos");
+// Exemplo de dados de serviços realizados e preços
+const servicos = {
+    "corteSimples": 20,
+    "corteNavalhado": 25,
+    "corteBarba": 35,
+    "reflexoPintura": 40,
+    "pezinho": 10
+};
 
-  // Verifica se o usuário está autenticado
-  if (!sessionStorage.getItem("authenticated")) {
-    window.location.href = "login.html";
-  }
+const agendamentos = [
+    { nome: "João", telefone: "123456789", servico: "corteSimples", data: "2023-09-21", hora: "10:00", pagamento: "pix", finalizado: false },
+    { nome: "Maria", telefone: "987654321", servico: "corteBarba", data: "2023-09-21", hora: "11:00", pagamento: "dinheiro", finalizado: false },
+    // Adicione mais agendamentos conforme necessário
+];
 
-  // Carregar agendamentos do localStorage
-  let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+function carregarAgendamentos() {
+    const tbody = document.getElementById('listaAgendamentos').querySelector('tbody');
+    tbody.innerHTML = ''; // Limpa o tbody antes de adicionar os agendamentos
+    agendamentos.forEach((agendamento, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${agendamento.nome}</td>
+            <td>${agendamento.telefone}</td>
+            <td>${agendamento.servico}</td>
+            <td>${agendamento.data}</td>
+            <td>${agendamento.hora}</td>
+            <td>${agendamento.pagamento}</td>
+            <td>
+                <button class="btn btn-success btn-sm" onclick="finalizarServico(${index})">Finalizar</button>
+                <button class="btn btn-danger btn-sm" onclick="cancelarServico(${index})">Cancelar</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
 
-  // Função para renderizar a lista de agendamentos
-  function renderizarAgendamentos() {
-    listaAgendamentos.innerHTML = "";
+function finalizarServico(index) {
+    if (!agendamentos[index].finalizado) {
+        agendamentos[index].finalizado = true;
+        atualizarRelatorioLucro(servicos[agendamentos[index].servico], true);
+        agendamentos.splice(index, 1); // Remove o agendamento da lista
+        carregarAgendamentos(); // Atualiza a tabela
+    }
+}
 
-    if (agendamentos.length > 0) {
-      agendamentos.forEach((agendamento, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-                    <td>${agendamento.nome}</td>
-<a href="https://wa.me/${agendamento.telefone.replace(
-          /\D/g,
-          ""
-        )}" target="_blank">${
-          agendamento.telefone
-        }</a></td>                    <td>${agendamento.servico}</td>
-                    <td>${agendamento.data}</td>
-                    <td>${agendamento.hora}</td>
-                    <td>${agendamento.pagamento}</td>
-                    <td>
-                        <button class="btn-acao btn-finalizado" onclick="finalizarAgendamento(${index})">Finalizado</button>
-                        <button class="btn-acao btn-excluir" onclick="excluirAgendamento(${index})">Excluir</button>
-                    </td>
-                `;
-        listaAgendamentos.appendChild(row);
-      });
+function cancelarServico(index) {
+    if (!agendamentos[index].finalizado) {
+        atualizarRelatorioLucro(servicos[agendamentos[index].servico], false);
+        agendamentos.splice(index, 1); // Remove o agendamento da lista
+        carregarAgendamentos(); // Atualiza a tabela
+    }
+}
+
+function atualizarRelatorioLucro(valor, finalizar) {
+    const lucroTotalElement = document.getElementById('lucroTotal');
+    let lucroAtual = parseFloat(lucroTotalElement.textContent.replace(/[^0-9.-]+/g, "")) || 0;
+
+    if (finalizar) {
+        lucroAtual += valor; // Adiciona o valor ao lucro total
     } else {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-                <td colspan="7" class="text-center">Nenhum agendamento disponível</td>
-            `;
-      listaAgendamentos.appendChild(row);
+        lucroAtual -= valor; // Subtrai o valor do lucro total
     }
-  }
 
-  // Função para finalizar (remover) um agendamento
-  window.finalizarAgendamento = function (index) {
-    if (confirm("Tem certeza que deseja remover este agendamento?")) {
-      agendamentos.splice(index, 1); // Remove o agendamento da lista
-      localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
-      renderizarAgendamentos();
-    }
-  };
+    lucroTotalElement.textContent = `Lucro Total do Dia: R$ ${lucroAtual.toFixed(2)}`;
+    document.getElementById('relatorioLucro').style.display = 'block'; // Exibe o relatório
+}
 
-  // Função para excluir um agendamento
-  window.excluirAgendamento = function (index) {
-    if (confirm("Tem certeza que deseja excluir este agendamento?")) {
-      agendamentos.splice(index, 1); // Remove o agendamento da lista
-      localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
-      renderizarAgendamentos();
-    }
-  };
+document.getElementById('gerarRelatorio').addEventListener('click', function() {
+    const dataAtual = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    let lucroTotal = 0;
 
-  // Renderizar a lista inicialmente
-  renderizarAgendamentos();
+    agendamentos.forEach(agendamento => {
+        if (agendamento.data === dataAtual && agendamento.finalizado) {
+            lucroTotal += servicos[agendamento.servico];
+        }
+    });
+
+    document.getElementById('lucroTotal').textContent = `Lucro Total do Dia (${dataAtual}): R$ ${lucroTotal.toFixed(2)}`;
+    document.getElementById('relatorioLucro').style.display = 'block'; // Exibe o relatório
 });
+
+// Carrega os agendamentos ao iniciar a página
+carregarAgendamentos();
