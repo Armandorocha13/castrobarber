@@ -1,22 +1,21 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const loginForm = document.getElementById('loginForm');
-    const loginMessage = document.getElementById('loginMessage');
+document.getElementById('formLogin').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evita o envio do formulário
 
-    loginForm.addEventListener('submit', function (event) {
-        event.preventDefault();
+    const usuario = document.getElementById('usuario').value;
+    const senha = document.getElementById('senha').value;
 
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+    // Credenciais fixas para o exemplo
+    const usuarioValido = 'admin';
+    const senhaValida = '123456';
 
-        // Verificação das credenciais
-        if (username === 'admin' && password === '123456') {
-            // Marca o usuário como autenticado
-            sessionStorage.setItem('authenticated', 'true');
-            // Redireciona para a página de administração
-            window.location.href = 'admin.html';
-        } else {
-            loginMessage.textContent = 'Usuário ou senha incorretos.';
-            loginMessage.classList.add('text-danger');
-        }
-    });
+    const mensagemErro = document.getElementById('mensagemErro');
+
+    if (usuario === usuarioValido && senha === senhaValida) {
+        // Redirecionar para admin.html
+        window.location.href = 'admin.html';
+    } else {
+        // Exibir mensagem de erro
+        mensagemErro.style.display = 'block';
+    }
 });
+
