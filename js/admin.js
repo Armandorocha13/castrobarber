@@ -13,6 +13,8 @@ const agendamentos = [
     // Adicione mais agendamentos conforme necessário
 ];
 
+let lucroTotal = 0; // Variável para armazenar o lucro total acumulado
+
 function carregarAgendamentos() {
     const tbody = document.getElementById('listaAgendamentos').querySelector('tbody');
     tbody.innerHTML = ''; // Limpa o tbody antes de adicionar os agendamentos
@@ -37,47 +39,33 @@ function carregarAgendamentos() {
 function finalizarServico(index) {
     if (!agendamentos[index].finalizado) {
         agendamentos[index].finalizado = true;
-        atualizarRelatorioLucro(servicos[agendamentos[index].servico], true);
+        atualizarRelatorioLucro(servicos[agendamentos[index].servico], true); // Atualiza o lucro total
         agendamentos.splice(index, 1); // Remove o agendamento da lista
-        carregarAgendamentos(); // Atualiza a tabela
+        carregarAgendamentos(); // Atualiza a tabela de agendamentos
+        exibirRelatorioLucro(); // Exibe o relatório atualizado com o lucro total acumulado
     }
 }
 
 function cancelarServico(index) {
     if (!agendamentos[index].finalizado) {
-        atualizarRelatorioLucro(servicos[agendamentos[index].servico], false);
         agendamentos.splice(index, 1); // Remove o agendamento da lista
         carregarAgendamentos(); // Atualiza a tabela
     }
 }
 
 function atualizarRelatorioLucro(valor, finalizar) {
-    const lucroTotalElement = document.getElementById('lucroTotal');
-    let lucroAtual = parseFloat(lucroTotalElement.textContent.replace(/[^0-9.-]+/g, "")) || 0;
-
     if (finalizar) {
-        lucroAtual += valor; // Adiciona o valor ao lucro total
-    } else {
-        lucroAtual -= valor; // Subtrai o valor do lucro total
+        lucroTotal += valor; // Acumula o valor no lucro total
     }
 
-    lucroTotalElement.textContent = `Lucro Total do Dia: R$ ${lucroAtual.toFixed(2)}`;
-    document.getElementById('relatorioLucro').style.display = 'block'; // Exibe o relatório
+    exibirRelatorioLucro(); // Chama a função para exibir o relatório atualizado
 }
 
-document.getElementById('gerarRelatorio').addEventListener('click', function() {
-    const dataAtual = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
-    let lucroTotal = 0;
-
-    agendamentos.forEach(agendamento => {
-        if (agendamento.data === dataAtual && agendamento.finalizado) {
-            lucroTotal += servicos[agendamento.servico];
-        }
-    });
-
-    document.getElementById('lucroTotal').textContent = `Lucro Total do Dia (${dataAtual}): R$ ${lucroTotal.toFixed(2)}`;
+function exibirRelatorioLucro() {
+    const lucroTotalElement = document.getElementById('lucroTotal');
+    lucroTotalElement.textContent = `Lucro Total do Dia: R$ ${lucroTotal.toFixed(2)}`;
     document.getElementById('relatorioLucro').style.display = 'block'; // Exibe o relatório
-});
+}
 
 // Carrega os agendamentos ao iniciar a página
 carregarAgendamentos();
